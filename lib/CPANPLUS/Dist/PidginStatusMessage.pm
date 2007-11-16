@@ -14,25 +14,33 @@ has 'pidgin_status' => (
     },
 );
 
+# we use a lot of evals because Pidgin might not be running, and that
+# shouldn't affect CPAN installs
+
 before 'init' => sub {
     my $self = shift; # hack around the fact that new never gets called
-    $self->pidgin_status(Pidgin::Status::CPAN->new);
+    eval {
+        $self->pidgin_status(Pidgin::Status::CPAN->new)
+    };
 };
 
 before 'prepare' => sub {
     my $self = shift;
-    $self->pidgin_status->installing($self->parent->author->cpanid,
-                                     $self->parent->module);
+    eval {
+        $self->pidgin_status->installing($self->parent->author->cpanid,
+                                         $self->parent->module)
+    };
+
 };
 
 after 'install' => sub {
     my $self = shift;
-    $self->pidgin_status->done;
+    eval { $self->pidgin_status->done };
 };
 
 sub DESTROY {
     my $self = shift;
-    $self->pidgin_status->done; # restore status no matter what
+    eval { $self->pidgin_status->done }; # restore status no matter what
 }
 
 1;
