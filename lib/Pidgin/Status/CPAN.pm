@@ -1,4 +1,40 @@
 package Pidgin::Status::CPAN;
+use Moose;
+use Pidgin::Status::CPAN::Manager;
+use utf8; 
+
+has 'status_manager' => (
+    isa     => 'Pidgin::Status::CPAN::Manager',
+    is      => 'ro',
+    default => sub { Pidgin::Status::CPAN::Manager->new },
+    handles => [qw/restore_message set_message/],
+);
+
+has 'format_string' => (
+    isa     => 'Str',
+    is      => 'ro',
+    default => '⚙ Now installing: %author - %dist',
+);
+
+sub installing {
+    my ($self, $author, $dist) = @_;
+    my $message = $self->_format($author, $dist);
+    $self->set_message($message); # TODO: time delay?
+}
+
+sub _format {
+    my ($self, $author, $dist) = @_;
+    my $message = $self->format_string;
+    $message =~ s/\%\%/%/g; # Foo %% => Foo %
+    $message =~ s/\%author/$author/g; # Foo %author = Foo PAUSE_ID
+    $message =~ s/\%dist/$dist/g;
+    return $message;
+}
+
+sub done {
+    my $self = shift;
+    $self->restore_message;
+}
 
 1;
 
