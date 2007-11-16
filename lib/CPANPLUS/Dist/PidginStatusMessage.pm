@@ -30,6 +30,10 @@ after 'install' => sub {
     $self->pidgin_status->done;
 };
 
+sub DESTROY {
+    my $self = shift;
+    $self->pidgin_status->done; # restore status no matter what
+}
 
 1;
 
@@ -56,5 +60,3 @@ DEB and PAR, so if you want those to work, don't use this module.
 =head1 SEE ALSO
 
 L<Pidgin::Status::CPAN>
-
-
