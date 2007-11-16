@@ -71,6 +71,8 @@ sub _get_statuses {
         $managed_status = $purple->PurpleSavedstatusNew($self->status_name,
                                                         $type);
     }
+    # it won't be current for long, so the rest of the app refers to current
+    # as saved_status
     return ($current_status, $managed_status);
 }
 
@@ -85,6 +87,12 @@ sub _get_purple {
       or die q{can't get the PurpleObejct};
 
     return $purple;
+}
+
+# remove the CPAN status from pidgin's saved status menu
+sub DEMOLISH {
+    my $self = shift;
+    $self->purple->PurpleSavedstatusDelete($self->status_name);
 }
 
 1;
