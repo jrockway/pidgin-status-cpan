@@ -27,20 +27,20 @@ before 'init' => sub {
 before 'prepare' => sub {
     my $self = shift;
     eval {
-        $self->pidgin_status->installing($self->parent->author->cpanid,
-                                         $self->parent->module)
+        $self->set_pidgin_installing($self->parent->author->cpanid,
+                                     $self->parent->module)
     };
 
 };
 
 after 'install' => sub {
     my $self = shift;
-    eval { $self->pidgin_status->done };
+    eval { $self->set_pidgin_done };
 };
 
 sub DESTROY {
     my $self = shift;
-    eval { $self->pidgin_status->done }; # restore status no matter what
+    eval { $self->set_pidgin_done }; # restore status no matter what
 }
 
 1;
