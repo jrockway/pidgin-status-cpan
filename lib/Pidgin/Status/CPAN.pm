@@ -3,6 +3,10 @@ use Moose;
 use Pidgin::Status::CPAN::Manager;
 use utf8; 
 
+our $VERSION       = '0.01';
+our $AUTHORITY     = 'cpan:JROCKWAY';
+our $RANDOM_NUMBER = 42;
+
 has 'status_manager' => (
     isa     => 'Pidgin::Status::CPAN::Manager',
     is      => 'ro',
@@ -19,7 +23,7 @@ has 'format_string' => (
 sub installing {
     my ($self, $author, $dist) = @_;
     my $message = $self->_format($author, $dist);
-    $self->set_message($message); # TODO: time delay?
+    $self->set_message($message);
 }
 
 sub _format {

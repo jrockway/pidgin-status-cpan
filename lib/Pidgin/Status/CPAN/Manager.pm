@@ -36,8 +36,11 @@ sub BUILD {
     return $self;
 }
 
+my $last_change;
 sub set_message {
     my ($self, $message) = @_;
+    return if time - $last_change < 30; # AIM fucking sucks
+    $last_change = time;
     $self->_change_managed_message($message);
     $self->_set_status($self->managed_status);
 }
@@ -121,4 +124,5 @@ Restore the message to what it was when C<new> was called
 
 =head1 SEE ALSO
 
-Pidgin::Status::CPAN
+L<Pidgin::Status::CPAN>
+
