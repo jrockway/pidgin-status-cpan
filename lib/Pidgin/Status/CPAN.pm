@@ -69,7 +69,17 @@ Now you can treat CPAN authors like the celebrities they are and share
 your unique taste in CPAN modules with others.  Fun!
 
 Additionally, when you're done installing that module, the status will
-revert back to whatever it was before.
+revert back to whatever it was before.  There's also a rate-limiting
+feature, so your status will only change every 30 seconds.  This is to
+prevent some brain-dead IM protocols killing your connection when you
+install a bunch of small CPAN modules.
+
+=head1 SETUP
+
+See L<CPANPLUS::Dist::PidginStatusMessage> for information on how to
+use this module with L<CPANPLUS|CPANPLUS>.  To use it with the regular
+CPAN shell, write an adaptor like
+C<CPANPLUS::Dist::PidginStatusMessage> :).
 
 =head1 AUTHOR
 
